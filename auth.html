@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>تسجيل الدخول | WAVE</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,7 +10,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
             font-family: 'Inter', sans-serif;
@@ -20,18 +24,27 @@
             align-items: center;
             justify-content: center;
             direction: rtl;
-            padding: 20px;
+            padding: 16px;
             position: relative;
             overflow-x: hidden;
         }
         
+        /* تأثير الخلفية المتحركة - أخف على الجوال */
         body::before {
             content: '';
             position: absolute;
-            width: 150%;
-            height: 150%;
-            background: radial-gradient(circle, rgba(255,107,53,0.15) 0%, rgba(247,183,51,0.05) 100%);
-            animation: rotate 20s linear infinite;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,107,53,0.1) 0%, rgba(247,183,51,0.03) 100%);
+            pointer-events: none;
+        }
+        
+        @media (min-width: 768px) {
+            body::before {
+                width: 150%;
+                height: 150%;
+                animation: rotate 20s linear infinite;
+            }
         }
         
         @keyframes rotate {
@@ -40,31 +53,25 @@
         }
         
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        @keyframes wave {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-5px); }
+            50% { transform: translateY(-8px); }
         }
         
         .card {
             background: rgba(255, 255, 255, 0.98);
-            border-radius: 48px;
-            padding: 48px 36px;
+            border-radius: 40px;
+            padding: 32px 24px;
             width: 100%;
             max-width: 440px;
-            box-shadow: 0 35px 68px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255,255,255,0.2);
-            animation: fadeInUp 0.6s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            animation: fadeInUp 0.5s ease;
             position: relative;
             z-index: 2;
-            backdrop-filter: blur(10px);
         }
         
         body.dark-mode .card {
@@ -72,13 +79,21 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         
+        /* تحسينات للجوال */
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 20px;
+                border-radius: 32px;
+            }
+        }
+        
         .logo {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
         
         .logo-icon {
-            font-size: 56px;
+            font-size: 48px;
             background: linear-gradient(135deg, #ff6b35, #f7b733);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -86,8 +101,14 @@
             animation: float 3s ease-in-out infinite;
         }
         
+        @media (max-width: 480px) {
+            .logo-icon {
+                font-size: 40px;
+            }
+        }
+        
         .card h1 {
-            font-size: 52px;
+            font-size: 44px;
             font-weight: 800;
             text-align: center;
             background: linear-gradient(135deg, #ff6b35, #f7b733);
@@ -96,17 +117,23 @@
             letter-spacing: -1px;
         }
         
+        @media (max-width: 480px) {
+            .card h1 {
+                font-size: 36px;
+            }
+        }
+        
         .subtitle {
             text-align: center;
             color: #888;
-            font-size: 14px;
-            margin-top: 8px;
+            font-size: 13px;
+            margin-top: 6px;
         }
         
         .tabs {
             display: flex;
-            gap: 12px;
-            margin: 32px 0 24px;
+            gap: 10px;
+            margin: 28px 0 20px;
             background: #f0f0f0;
             border-radius: 60px;
             padding: 5px;
@@ -118,15 +145,22 @@
         
         .tab {
             flex: 1;
-            padding: 14px 12px;
+            padding: 12px 8px;
             background: none;
             border: none;
             border-radius: 60px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             color: #666;
             transition: all 0.3s;
+        }
+        
+        @media (max-width: 480px) {
+            .tab {
+                padding: 10px 6px;
+                font-size: 13px;
+            }
         }
         
         body.dark-mode .tab {
@@ -136,7 +170,7 @@
         .tab.active {
             background: linear-gradient(135deg, #ff6b35, #f7b733);
             color: white;
-            box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+            box-shadow: 0 4px 12px rgba(255,107,53,0.3);
         }
         
         .form {
@@ -149,12 +183,12 @@
         }
         
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         
         .input-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             margin-bottom: 6px;
             color: #555;
@@ -174,19 +208,26 @@
             top: 50%;
             transform: translateY(-50%);
             color: #ff6b35;
-            font-size: 18px;
+            font-size: 16px;
         }
         
         input {
             width: 100%;
-            padding: 16px 48px 16px 20px;
+            padding: 14px 48px 14px 16px;
             border: 2px solid #e0e0e0;
-            border-radius: 28px;
-            font-size: 15px;
+            border-radius: 30px;
+            font-size: 14px;
             font-family: 'Inter', sans-serif;
             outline: none;
             transition: all 0.3s;
             background: #fff;
+        }
+        
+        @media (max-width: 480px) {
+            input {
+                padding: 13px 45px 13px 14px;
+                font-size: 13px;
+            }
         }
         
         body.dark-mode input {
@@ -197,22 +238,30 @@
         
         input:focus {
             border-color: #ff6b35;
-            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
         }
         
         button {
             width: 100%;
-            padding: 16px;
-            margin-top: 24px;
+            padding: 14px;
+            margin-top: 20px;
             background: linear-gradient(135deg, #ff6b35, #f7b733);
             border: none;
-            border-radius: 32px;
+            border-radius: 40px;
             color: white;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+            box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+        }
+        
+        @media (max-width: 480px) {
+            button {
+                padding: 12px;
+                font-size: 14px;
+                margin-top: 16px;
+            }
         }
         
         button:active {
@@ -221,16 +270,16 @@
         
         .error-msg {
             color: #ff6b35;
-            font-size: 13px;
-            margin-top: 12px;
+            font-size: 12px;
+            margin-top: 10px;
             text-align: center;
         }
         
         .footer {
             text-align: center;
-            margin-top: 28px;
+            margin-top: 24px;
             color: #888;
-            font-size: 13px;
+            font-size: 12px;
         }
         
         .footer a {
@@ -242,8 +291,8 @@
         
         .loading-spinner {
             display: inline-block;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border: 2px solid white;
             border-top-color: transparent;
             border-radius: 50%;
@@ -263,23 +312,33 @@
         
         .theme-toggle {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
+            top: 16px;
+            left: 16px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
             border: none;
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             color: white;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             z-index: 100;
             transition: 0.2s;
         }
         
         .theme-toggle:active {
-            transform: scale(0.9);
+            transform: scale(0.92);
+        }
+        
+        @media (max-width: 480px) {
+            .theme-toggle {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+                top: 12px;
+                left: 12px;
+            }
         }
         
         .wave-decoration {
@@ -287,17 +346,17 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 60px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ff6b35" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            height: 40px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ff6b35" fill-opacity="0.08" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
             background-size: cover;
             pointer-events: none;
         }
         
         .social-buttons {
             display: flex;
-            gap: 16px;
+            gap: 14px;
             justify-content: center;
-            margin-top: 24px;
+            margin-top: 20px;
         }
         
         .social-btn {
@@ -312,26 +371,36 @@
             transition: 0.2s;
         }
         
+        @media (max-width: 480px) {
+            .social-btn {
+                width: 40px;
+                height: 40px;
+            }
+            .social-btn i {
+                font-size: 18px;
+            }
+        }
+        
         body.dark-mode .social-btn {
             background: #1a1a1a;
         }
         
         .social-btn:active {
-            transform: scale(0.9);
+            transform: scale(0.92);
         }
         
         .social-btn i {
-            font-size: 20px;
+            font-size: 18px;
             color: #ff6b35;
         }
         
         .divider {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin: 24px 0;
+            gap: 12px;
+            margin: 20px 0;
             color: #ccc;
-            font-size: 12px;
+            font-size: 11px;
         }
         
         .divider::before, .divider::after {
@@ -455,7 +524,7 @@
     function showToast(msg) {
         const toast = document.createElement('div');
         toast.textContent = msg;
-        toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#262626;color:white;padding:12px24px;border-radius:40px;z-index:1000;font-size:13px;';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#262626;color:white;padding:10px 20px;border-radius:40px;z-index:1000;font-size:12px;white-space:nowrap;max-width:90%;white-space:normal;text-align:center;';
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 2000);
     }
